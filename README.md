@@ -29,7 +29,7 @@ Enjoy creating random chicken diets with the Chicken Diet Generator!
 
 ## Customization
 
-You can customize the food options and nutritional requirements by modifying the `foods` array and the variables in the `generateChickenDiet` function in the `script.js` file.
+You can customize the food options and nutritional requirements by modifying the `foods` array and the variables in the `generateChickenDiet` function in the `chicken-diet-generator.js` file.
 
 ```javascript
 // Modify the food options
