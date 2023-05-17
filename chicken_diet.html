@@ -2,12 +2,126 @@
 <html>
 <head>
   <title>Chicken Diet Generator</title>
-  <script src="script.js"></script>
 </head>
 <body>
   <h1>Chicken Diet Generator</h1>
+
   <button onclick="generateDiet()">Generate Diet</button>
-  <h2>Generated Diet</h2>
+
+  <h2>Daily Diet</h2>
   <ul id="dietList"></ul>
+
+  <script>
+    class Food {
+      constructor(name, category, nutritional_values) {
+        this.name = name;
+        this.category = category;
+        this.nutritional_values = nutritional_values;
+      }
+    }
+
+    function generateChickenDiet() {
+      // Define the food options available
+      const foods = [
+        // Existing food items
+        new Food("Corn", "Grains", { protein: 8, carbohydrates: 80, fats: 4, vitamins: 8 }),
+        new Food("Wheat", "Grains", { protein: 13, carbohydrates: 71, fats: 2, vitamins: 14 }),
+        new Food("Soybean Meal", "Grains", { protein: 47, carbohydrates: 17, fats: 2, vitamins: 1 }),
+        new Food("Barley", "Grains", { protein: 12, carbohydrates: 73, fats: 2, vitamins: 5 }),
+        new Food("Oats", "Grains", { protein: 17, carbohydrates: 66, fats: 6, vitamins: 5 }),
+        new Food("Rice", "Grains", { protein: 7, carbohydrates: 77, fats: 2, vitamins: 1 }),
+        new Food("Cabbage", "Vegetables", { protein: 1.3, carbohydrates: 5.8, fats: 0.1, vitamins: 29 }),
+        new Food("Carrot", "Vegetables", { protein: 0.9, carbohydrates: 9.6, fats: 0.2, vitamins: 33 }),
+        new Food("Spinach", "Vegetables", { protein: 2.9, carbohydrates: 3.6, fats: 0.4, vitamins: 28 }),
+        new Food("Kale", "Vegetables", { protein: 2.9, carbohydrates: 5.6, fats: 0.6, vitamins: 49 }),
+        new Food("Apple", "Fruits", { protein: 0.3, carbohydrates: 13.8, fats: 0.4, vitamins: 2 }),
+        new Food("Banana", "Fruits", { protein: 1.1, carbohydrates: 22, fats: 0.2, vitamins: 20 }),
+        new Food("Berries", "Fruits", { protein: 0.7, carbohydrates: 14, fats: 0.3, vitamins: 25 }),
+        new Food("Tomato", "Fruits", { protein: 0.9, carbohydrates: 3.9, fats: 0.2, vitamins: 20 }),
+        new Food("Chicken Breast", "Meat", { protein: 31, carbohydrates: 0, fats: 4, vitamins: 0 }),
+        new Food("Fish", "Meat", { protein: 22, carbohydrates: 0, fats: 6, vitamins: 0 }),
+        new Food("Insects", "Meat", { protein: 60, carbohydrates: 10, fats: 20, vitamins: 5 }),
+        new Food("Beef", "Meat", { protein: 26, carbohydrates: 0, fats: 17, vitamins: 0 }),
+        new Food("Lamb", "Meat", { protein: 25, carbohydrates: 0, fats: 20, vitamins: 0 }),
+        new Food("Pork", "Meat", { protein: 21, carbohydrates: 0, fats: 6, vitamins: 0 }),
+        new Food("Turkey", "Meat", { protein: 29, carbohydrates: 0, fats: 1, vitamins: 0 }),
+        new Food("Duck", "Meat", { protein: 24, carbohydrates: 0, fats: 15, vitamins: 0 }),
+        new Food("Egg", "Meat", { protein: 13, carbohydrates: 1, fats: 11, vitamins: 0 }),
+        new Food("Cheese", "Dairy", { protein: 25, carbohydrates: 1, fats: 33, vitamins: 0 }),
+        new Food("Yogurt", "Dairy", { protein: 9, carbohydrates: 6, fats: 4, vitamins: 0 }),
+        new Food("Milk", "Dairy", { protein: 3, carbohydrates: 5, fats: 3, vitamins: 0 }),
+        new Food("Grasshoppers", "Insects", { protein: 20, carbohydrates: 6, fats: 6, vitamins: 0 }),
+        new Food("Mealworms", "Insects", { protein: 20, carbohydrates: 14, fats: 17, vitamins: 0 }),
+        new Food("Crickets", "Insects", { protein: 21, carbohydrates: 8, fats: 6, vitamins: 0 }),
+        new Food("Black Soldier Fly Larvae", "Insects", { protein: 43, carbohydrates: 28, fats: 35, vitamins: 0 }),
+        new Food("Earthworms", "Insects", { protein: 20, carbohydrates: 9, fats: 6, vitamins: 0 }),
+        new Food("Mealworm Beetles", "Insects", { protein: 20, carbohydrates: 14, fats: 19, vitamins: 0 }),
+        new Food("Snails", "Insects", { protein: 16, carbohydrates: 2, fats: 0, vitamins: 0 }),
+        new Food("Crabs", "Seafood", { protein: 18, carbohydrates: 0, fats: 2, vitamins: 0 }),
+        new Food("Shrimp", "Seafood", { protein: 24, carbohydrates: 1, fats: 1, vitamins: 0 }),
+        new Food("Squid", "Seafood", { protein: 20, carbohydrates: 4, fats: 1, vitamins: 0 })
+        // ... add the rest of the food options here
+      ];
+
+      const diet = {
+        Grains: 0,
+        Vegetables: 0,
+        Fruits: 0,
+        Meat: 0,
+        Dairy: 0,
+        Insects: 0,
+        Seafood: 0,
+      };
+
+      // Calculate the nutritional requirements
+      const protein_requirement = 18;
+      const carbohydrate_requirement = 60;
+      const fat_requirement = 5;
+      const vitamin_requirement = 17;
+
+      const total_weight = 120; // Total weight of the diet (assumed 120 grams for simplicity)
+
+      // Generate the diet by randomly selecting foods and adjusting weights to meet nutritional requirements
+      let remaining_weight = total_weight;
+      while (remaining_weight > 0) {
+        // Randomly select a food from the available options
+        const food = foods[Math.floor(Math.random() * foods.length)];
+
+        // Calculate the weight based on the nutritional requirements and the food's nutritional values
+        const weight = Math.min(
+          remaining_weight,
+          (total_weight * food.nutritional_values.protein) / protein_requirement,
+          (total_weight * food.nutritional_values.carbohydrates) / carbohydrate_requirement,
+          (total_weight * food.nutritional_values.fats) / fat_requirement,
+          (total_weight * food.nutritional_values.vitamins) / vitamin_requirement
+        );
+
+        // Update the diet object with the selected food and weight
+        diet[food.category] += weight;
+        remaining_weight -= weight;
+      }
+
+      return diet;
+    }
+
+    function generateDiet() {
+      // Generate a random chicken diet
+      const dailyDiet = generateChickenDiet();
+
+      // Get the diet list element
+      const dietList = document.getElementById("dietList");
+
+      // Clear previous results
+      dietList.innerHTML = "";
+
+      // Print the daily diet
+      for (const foodGroup in dailyDiet) {
+        const weight = dailyDiet[foodGroup].toFixed(2);
+        const listItem = document.createElement("li");
+        listItem.textContent = `${foodGroup}: ${weight}g`;
+        dietList.appendChild(listItem);
+      }
+    }
+  </script>
 </body>
 </html>
